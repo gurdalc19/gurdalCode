@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    }
+    
     environment {
         GCR_CRED = credentials('dream-project-381712')
         GCR_REPO = "gcr.io/dream-project-381712"
@@ -29,4 +29,4 @@ pipeline {
             }
         }
     }
-
+}
