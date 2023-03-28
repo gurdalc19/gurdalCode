@@ -1,28 +1,34 @@
-pipeline {
-    agent any
+node {
+    def app
 
-    environment {
-        GCR_CRED = credentials('jenkins-cred')
-        GCR_REPO = "gcr.io/dream-project-381712"
-        IMAGE_TAG = "${env.BUILD_ID}"
-    }
-    stages {
-        stage('Clone repository') {
-                steps{
-                    checkout scm
-                }
-    }
-    stage("docker build"){
-        Img = docker.build(
-            "dream-project-381712/dream:$IMAGE_TAG",
-            "-f Dockerfile ."
-        )
+    stage('Clone repository') {
+      
+
+        checkout scm
     }
 
-    stage("docker push") {
+    stage('Build image') {
+  
+       app = docker.build("raj80dockerid/test")
+    }
+
+    stage('Test image') {
+  
+
+        app.inside {
+            sh 'echo "Tests passed"'
+        }
+    }
+
+    stage('Push image') {
+        
         docker.withRegistry('https://gcr.io', "gcr:dream-project-381712") {
-            Img.push("$IMAGE_TAG")
+            app.push("${env.BUILD_NUMBER}")
+        }
+    }
+    
+    stage('Trigger ManifestUpdate') {
+                echo "triggering updatemanifestjob"
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
 }
-        }
-    }
