@@ -12,20 +12,18 @@ pipeline {
                     checkout scm
                 }
     }
-        stage('Build') {
-            steps {
-                sh "echo ${GCR_CRED} > login.json"
-                sh "cat login.json | docker login -u _json_key --password-stdin https://us.gcr.io"
-                sh "docker image ls"
-                sh "docker push --all-tags ${GCR_REPO}"
+    stage("docker build"){
+        Img = docker.build(
+            "dream-project-381712/dream:$IMAGE_TAG",
+            "-f Dockerfile ."
+        )
+    }
 
-            }
+    stage("docker push") {
+        docker.withRegistry('https://gcr.io', "gcr:dream-project-381712") {
+            Img.push("imageTag")
         }
-        stage('Trigger ManifestUpdate') {
-            steps{
-                echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-            }
+}
         }
     }
 }
