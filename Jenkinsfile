@@ -1,3 +1,9 @@
+environment {
+        GCR_CRED = credentials('dream-project-381712')
+        GCR_REPO = "gcr.io/dream-project-381712"
+        IMAGE_TAG = $BUILD_NUMBER
+    }
+
 node {
     def app
 
@@ -23,9 +29,12 @@ node {
 
     stage('Push Image') {
         
-        docker.withRegistry('https://gcr.io', 'gcr:dream-project-381712') {
-            app.push("${env.BUILD_NUMBER}")
-        }
+        sh 'echo "$GCR_CRED" > abc.json'
+        sh 'docker login -u _json_key -p "$(cat abc.json)" https://gcr.io'
+        sh "docker build . -t ${GCR_REPO}:${IMAGE_TAG}"
+        sh "docker push ${GCR_REPO}:${IMAGE_TAG}"
+        sh 'docker logout https://gcr.io'    
+
     }
     
     
