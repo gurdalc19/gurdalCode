@@ -23,7 +23,7 @@ node {
 
     stage('Push Image') {
         
-        docker.withRegistry('https://us.gcr.io', 'gcr:dream-project-381712') {
+        docker.withRegistry('https://gcr.io', 'gcr:dream-project-381712') {
             app.push("${env.BUILD_NUMBER}")
         }
     }
