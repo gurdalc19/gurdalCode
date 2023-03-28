@@ -9,7 +9,7 @@ node {
 
     stage('Build image') {
   
-       app = docker.build("gcr.io/dream-project-381712/dream")
+       app = sudo docker.build("gcr.io/dream-project-381712/dream")
     }
 
     stage('Test image') {
