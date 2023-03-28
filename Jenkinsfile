@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh "echo ${GCR_CRED} > login.json"
-                sh "cat login.json | docker login -u _json_key --password-stdin \ https://us.gcr.io"
+                sh "cat login.json | docker login -u _json_key --password-stdin \ 'https://us.gcr.io'"
                 sh "docker image ls"
                 sh "docker push --all-tags ${GCR_REPO}"
 
