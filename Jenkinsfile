@@ -1,46 +1,31 @@
-environment {
-        GCR_CRED = credentials('jenkins-cred')
+pipeline {
+    agent any
+    environment {
+        GCR_CRED = credentials('dream-project-381712')
         GCR_REPO = "gcr.io/dream-project-381712"
-        IMAGE_TAG = $BUILD_NUMBER
+        IMAGE_TAG = "${env.BUILD_ID}"
     }
-
-node {
-    def app
-
-    stage('Clone repository') {
-      
-
-        checkout scm
+    stages {
+        stage('Clone repository') {
+                steps{
+                        checkout scm
+                }
     }
+        stage('Build') {
+            steps {
+                echo $GCR_CRED > login.json
+                cat login.json | docker login cat jenkins-sa.json | docker login -u _json_key --password-stdin https://gcr.io
+                docker build . -t ${GCR_REPO}:${IMAGE_TAG}
+                docker image ls
+                docker push --all-tags $GCR_REPO
 
-    stage('Build image') {
-  
-       app = docker.build("gcr.io/dream-project-381712/dream")
-    }
-
-    stage('Test image') {
-  
-
-        app.inside {
-            sh 'echo "Tests passed"'
+            }
         }
-    }
-
-
-    stage('Push Image') {
-        
-        sh 'echo "$GCR_CRED" > jenkins-sa.json'
-        sh "cat jenkins-sa.json"
-        sh 'cat jenkins-sa.json | docker login -u _json_key --password-stdin https://gcr.io'
-        sh "docker build . -t ${GCR_REPO}:${IMAGE_TAG}"
-        sh "docker push ${GCR_REPO}:${IMAGE_TAG}"
-        sh 'docker logout https://gcr.io'    
-
-    }
-    
-    
-    stage('Trigger ManifestUpdate') {
+        stage('Trigger ManifestUpdate') {
+            steps{
                 echo "triggering updatemanifestjob"
-                build job: 'dreamManifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+            }
         }
+    }
 }
