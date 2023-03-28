@@ -1,5 +1,5 @@
 environment {
-        GCR_CRED = credentials('dream-project-381712')
+        GCR_CRED = credentials('jenkins-cred')
         GCR_REPO = "gcr.io/dream-project-381712"
         IMAGE_TAG = $BUILD_NUMBER
     }
