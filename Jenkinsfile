@@ -20,17 +20,12 @@ node {
         }
     }
 
-    stage('Push image') {
-        
-        docker.withRegistry('', 'dockerhub') {
-            
-        }
-    }
+
     stage('Push Image') {
         
         docker.withRegistry('https://us.gcr.io', 'gcr:dream-project-381712') {
             app.push("${env.BUILD_NUMBER}")
-}
+    }
     
     
     stage('Trigger ManifestUpdate') {
