@@ -21,7 +21,7 @@ pipeline {
 
     stage("docker push") {
         docker.withRegistry('https://gcr.io', "gcr:dream-project-381712") {
-            Img.push("imageTag")
+            Img.push("$IMAGE_TAG")
         }
 }
         }
