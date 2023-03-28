@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         GCR_CRED = credentials('jenkins-cred')
         GCR_REPO = "gcr.io/dream-project-381712"
@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh "echo ${GCR_CRED} > login.json"
-                sh "cat login.json | docker login cat jenkins-sa.json | docker login -u _json_key --password-stdin 'https://gcr.io'"
+                sh "cat login.json | docker login -u _json_key --password-stdin 'https://gcr.io'"
                 sh "docker build  -t ${GCR_REPO}:{$IMAGE_TAG} -t ${GCR_REPO} ."
                 sh "docker image ls"
                 sh "docker push --all-tags ${GCR_REPO}"
