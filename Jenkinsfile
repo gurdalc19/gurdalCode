@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo $GCR_CRED > login.json
                 cat login.json | docker login cat jenkins-sa.json | docker login -u _json_key --password-stdin 'https://gcr.io'
-                docker build . -t "${GCR_REPO}":"${IMAGE_TAG}"
+                docker build . -t "$GCR_REPO":"$IMAGE_TAG"
                 docker image ls
                 docker push --all-tags $GCR_REPO
 
