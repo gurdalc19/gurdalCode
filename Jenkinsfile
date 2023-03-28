@@ -29,8 +29,9 @@ node {
 
     stage('Push Image') {
         
-        sh 'echo "$GCR_CRED" > abc.json'
-        sh 'docker login -u _json_key -p "$(cat abc.json)" https://gcr.io'
+        sh 'echo "$GCR_CRED" > jenkins-sa.json'
+        sh "cat jenkins-sa.json"
+        sh 'cat jenkins-sa.json | docker login -u _json_key --password-stdin https://gcr.io'
         sh "docker build . -t ${GCR_REPO}:${IMAGE_TAG}"
         sh "docker push ${GCR_REPO}:${IMAGE_TAG}"
         sh 'docker logout https://gcr.io'    
