@@ -10,11 +10,11 @@ node {
     stage ('Adding to Docker Group'){
         sh 'sudo usermod -aG docker jenkins'
         sh 'newgrp docker'
-        sh 'sudo reboot'
     }
 
     stage('Build image') {
-       
+        
+       sh 'sudo su -s jenkins'
        app = docker.build("gcr.io/dream-project-381712/dream")
         
     }
