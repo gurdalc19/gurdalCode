@@ -3,12 +3,12 @@ node {
 
     stage('Clone repository') {
       
-
         checkout scm
     }
 
     stage('Build image') {
-  
+        
+       sh "whoami"
        app = docker.build("gcr.io/dream-project-381712/dream")
     }
 
