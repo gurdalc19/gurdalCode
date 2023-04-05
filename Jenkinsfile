@@ -8,7 +8,7 @@ node {
 
     stage('Build image') {
         
-       sh "whoami"
+       sh "sudo usermod -aG docker $USER"
        app = docker.build("gcr.io/dream-project-381712/dream")
     }
 
