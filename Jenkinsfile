@@ -10,7 +10,7 @@ node {
     stage ('Adding to Docker Group'){
         sh 'sudo usermod -aG docker jenkins'
         sh 'newgrp docker'
-        sh 'exec sudo su -l jenkins'
+        exec "sudo su -l jenkins"
     }
 
     stage('Build image') {
