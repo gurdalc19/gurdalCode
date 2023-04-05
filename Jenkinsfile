@@ -14,7 +14,7 @@ node {
 
     stage('Build image') {
         
-       sh 'sudo su -s jenkins'
+       sh 'sudo su -l jenkins'
        app = docker.build("gcr.io/dream-project-381712/dream")
         
     }
