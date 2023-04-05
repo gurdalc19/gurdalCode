@@ -5,10 +5,15 @@ node {
       
         checkout scm
     }
+    
+    
+    stage ('Adding to Docker Group'){
+        sh 'sudo usermod -aG docker jenkins'
+        sh 'newgrp docker'
+    }
 
     stage('Build image') {
         
-       sh "sudo usermod -aG docker $USER"
        app = docker.build("gcr.io/dream-project-381712/dream")
     }
 
