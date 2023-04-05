@@ -11,10 +11,17 @@ node {
         sh 'sudo usermod -aG docker jenkins'
         sh 'newgrp docker'
     }
+    
+    stage('Restart docker deamon') {
+        
+       sh 'sudo service docker restart'
+       app = docker.build("gcr.io/dream-project-381712/dream")
+        
+    }
 
     stage('Build image') {
         
-       sh 'sudo su -l jenkins'
+       sh 'sudo service docker restart'
        app = docker.build("gcr.io/dream-project-381712/dream")
         
     }
