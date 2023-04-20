@@ -11,7 +11,7 @@ node {
 
     stage('Build image') {
         
-       app = docker.build("gcr.io/dream-project-381712/dream")
+       app = docker.build("gcr.io/<project_id>/dream")
         
     }
 
@@ -25,7 +25,7 @@ node {
 
     stage('Push image') {
         
-        docker.withRegistry('https://gcr.io', "gcr:dream-project-381712") {
+        docker.withRegistry('https://gcr.io', "gcr:<project_id>) {
             app.push("${env.BUILD_NUMBER}")
         }
     }
